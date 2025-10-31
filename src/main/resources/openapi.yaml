@@ -1,0 +1,24 @@
+openapi: 3.0.4
+info:
+  title: Cinema deals API
+  description: Cinema deals API
+  version: 0.1.9
+
+servers:
+  - url: http://localhost:8080/api/v1/
+    description: Optional server description, e.g. Main (production) server
+
+paths:
+  /tickets/calculate:
+    Post:
+      summary: Calculate ticket prices.
+      description: Calculate ticket prices based on multiple discount types.
+      responses:
+        "200": # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
