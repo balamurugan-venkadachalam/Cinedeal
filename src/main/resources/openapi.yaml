@@ -1,24 +1,106 @@
-openapi: 3.0.4
+openapi: 3.0.3
 info:
   title: Cinema deals API
   description: Cinema deals API
   version: 0.1.9
 
 servers:
-  - url: http://localhost:8080/api/v1/
+  - url: http://localhost:8080/api/v1
     description: Optional server description, e.g. Main (production) server
 
 paths:
-  /tickets/calculate:
-    Post:
+  /transactions/calculate-pricing:
+    post:
       summary: Calculate ticket prices.
-      description: Calculate ticket prices based on multiple discount types.
+      description: Calculate the breakdown of movie tickets and total cost based on multiple discount types.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionRequest'
+
       responses:
         "200": # status code
-          description: A JSON array of user names
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: string
+         description: Transaction details retrieved successfully
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/TransactionResponse'
+
+components:
+  schemas:
+    TransactionRequest:
+      type: object
+      required:
+        - transactionId
+        - customers
+      properties:
+        transactionId:
+          type: string
+          description: unique transaction id
+          example: 1234567890
+          minLength: 1
+          maxLength: 10
+        customers:
+          type: array
+          description: list of customers
+          items:
+            $ref: '#/components/schemas/Customer'
+
+    TransactionResponse:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          description: unique transaction id
+          example: 1234567890
+        tickets:
+          type: array
+          description: list of tickets
+          items:
+            $ref: '#/components/schemas/Ticket'
+        totalCost:
+          type: number
+          format: double
+          description: total cost of the transaction
+          example: 100.00
+
+    Customer:
+      type: object
+      required:
+        - name
+        - age
+      properties:
+        name:
+          type: string
+          description: customer name
+          example: Alex
+          minLength: 3
+          maximum: 150
+        age:
+          type: integer
+          format: int32
+          description: customer age
+          example: 25
+          minimum: 0
+          maximum: 100
+    Ticket:
+      type: object
+      properties:
+        ticketType:
+          type: string
+          description: type of ticket
+          example: Adult
+          enum:
+            - Children
+            - Teen
+            - Adult
+            - Senior
+        quantity:
+          type: integer
+          format: int32
+          description: number of tickets
+          example: 1
+
+
