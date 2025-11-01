@@ -1,3 +1,9 @@
 spring:
   application:
-    name: booking
+    name: Ticket Transaction API
+
+
+logging:
+  level:
+    org.springframework: DEBUG
+    com.ticket: DEBUG

@@ -25,15 +25,24 @@ openApiGenerate {
     inputSpec = "${rootDir}/src/main/resources/openapi.yaml"
     generatorName = "spring"
     library = "spring-boot"
-    outputDir = "${layout.buildDirectory.get().asFile}/generated/src/main/java"
+    outputDir = "${layout.buildDirectory.get().asFile}/generated"
     apiPackage = "com.ticket.transaction.api"
-    modelPackage = "com.ticket.model"
+    modelPackage = "com.ticket.transaction.model"
     configOptions = [
-            sourceFolder: "src/main/java",
             interfaceOnly: "true",
             dateLibrary: "java8",
-            useJakartaEe: "true"
+            useJakartaEe: "true",
+            openApiNullable: "false",
+            useBeanValidation: "true",
+            useSpringBoot3: "true",
+            useTags: "true"
     ]
+}
+
+// fix Mockito's dynamic agent loading in Java 21
+tasks.named('test') {
+    useJUnitPlatform()
+    jvmArgs '-XX:+EnableDynamicAgentLoading'
 }
 
 sourceSets {
@@ -46,6 +55,7 @@ sourceSets {
 
 tasks.named('compileJava') {
     dependsOn tasks.named('openApiGenerate')
+    options.compilerArgs += ['-Xlint:none', '-Xlint:-processing']
 }
 
 repositories {
@@ -55,6 +65,7 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'jakarta.servlet:jakarta.servlet-api'
     implementation 'jakarta.validation:jakarta.validation-api'
     implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
@@ -65,8 +76,4 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-hateoas-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-}
-
-tasks.named('test') {
-	useJUnitPlatform()
 }
