@@ -5,7 +5,7 @@ plugins {
     id 'org.openapi.generator' version '7.17.0'
 }
 
-group = 'com.cinedeals'
+group = 'com.ticket'
 version = '0.0.1-SNAPSHOT'
 description = 'Cinimas online booking  '
 
@@ -26,8 +26,8 @@ openApiGenerate {
     generatorName = "spring"
     library = "spring-boot"
     outputDir = "${layout.buildDirectory.get().asFile}/generated/src/main/java"
-    apiPackage = "com.cinedeal.transaction.api"
-    modelPackage = "com.cinideal.model"
+    apiPackage = "com.ticket.transaction.api"
+    modelPackage = "com.ticket.model"
     configOptions = [
             sourceFolder: "src/main/java",
             interfaceOnly: "true",
