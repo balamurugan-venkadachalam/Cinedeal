@@ -31,10 +31,11 @@ public class TransactionControllerTest {
     @Test
     void calculatePricing_shouldReturnTransactionRequest_whenValidRequest() throws Exception {
         //GIVEN
-        TransactionRequest request = new TransactionRequest();
-        request.setTransactionId(1);
+        TransactionRequest request = TransactionRequest.builder()
+                .transactionId(1)
+                .customers(gerCustomers())
+                .build();
 
-        request.setCustomers(gerCustomers());
 
         //WHEN & THEN
         mockMvc.perform(post("/api/v1/transactions/calculate-pricing")
@@ -52,8 +53,7 @@ public class TransactionControllerTest {
     @Test
     void calculatePricing_shouldReturnBadRequest_whenCustomersMissing() throws Exception {
         //GIVEN
-        TransactionRequest request = new TransactionRequest();
-        request.setTransactionId(1);
+        TransactionRequest request =  TransactionRequest.builder().transactionId(2).build();
 
         //WHEN & THEN
         mockMvc.perform(post("/api/v1/transactions/calculate-pricing")
@@ -67,13 +67,35 @@ public class TransactionControllerTest {
     }
 
     @Test
-    void calculatePricing_shouldReturnBadRequest_whenTransactionIdMissing() throws Exception {
+    void calculatePricing_shouldReturnBadRequest_whenCustomersIsEmpty() throws Exception {
         //GIVEN
-        TransactionRequest request = new TransactionRequest();
-        request.setTransactionId(1);
-        Customer customer1 = new Customer();
-        customer1.setName("Alex K");
-        request.setCustomers(List.of(customer1));
+        TransactionRequest request =  TransactionRequest.builder()
+                .transactionId(2)
+                .customers(List.of())
+                .build();
+
+        //WHEN & THEN
+        mockMvc.perform(post("/api/v1/transactions/calculate-pricing")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").value("[customers: size must be between 1 and 50]"));
+
+    }
+
+    @Test
+    void calculatePricing_shouldReturnBadRequest_whenCustomerAgeMissing() throws Exception {
+        //GIVEN
+        Customer customer = Customer.builder()
+                .name("Alex K")
+                .build();
+
+        TransactionRequest request = TransactionRequest.builder()
+                .transactionId(1)
+                .customers(List.of(customer))
+                .build();
 
         //WHEN & THEN
         mockMvc.perform(post("/api/v1/transactions/calculate-pricing")
@@ -87,10 +109,12 @@ public class TransactionControllerTest {
     }
 
     @Test
-    void calculatePricing_shouldReturnBadRequest_whenCustomerAgeMissing() throws Exception {
+    void calculatePricing_shouldReturnBadRequest_whenTransactionIdMissing() throws Exception {
         //GIVEN
-        TransactionRequest request = new TransactionRequest();
-        request.setCustomers(gerCustomers());
+        TransactionRequest request = TransactionRequest.builder()
+                .customers(gerCustomers())
+                .build();
+
         //WHEN & THEN
         mockMvc.perform(post("/api/v1/transactions/calculate-pricing")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -104,13 +128,16 @@ public class TransactionControllerTest {
 
 
     private static List<Customer> gerCustomers() {
-        Customer customer1 = new Customer();
-        customer1.setName("Alex K");
-        customer1.setAge(30);
 
-        Customer customer2 = new Customer();
-        customer2.setName("Jone David");
-        customer2.setAge(25);
+        Customer customer1 = Customer.builder()
+                .name("Alex K")
+                .age(25)
+                .build();
+
+        Customer customer2 = Customer.builder()
+                .name("Jone David")
+                .age(30)
+                .build();
 
         return List.of(customer1, customer2);
     }

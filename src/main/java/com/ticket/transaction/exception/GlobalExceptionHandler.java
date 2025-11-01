@@ -28,10 +28,11 @@ public class GlobalExceptionHandler {
                 ? HttpStatus.CONFLICT
                 : HttpStatus.BAD_REQUEST;
 
-        ErrorResponse error = new ErrorResponse();
-        error.setStatus(status.value());
-        error.setError(status.getReasonPhrase());
-        error.setMessage(ex.getMessage());
+        ErrorResponse error = ErrorResponse.builder()
+                .status(status.value())
+                .error(status.getReasonPhrase())
+                .message(ex.getMessage() != null ? ex.getMessage() : "Invalid argument")
+                .build();
         return ResponseEntity.status(status).body(error);
     }
 
@@ -46,10 +47,11 @@ public class GlobalExceptionHandler {
                         error.getDefaultMessage() != null ? error.getDefaultMessage() : "Invalid value"))
                 .collect(Collectors.joining(", "));
 
-        ErrorResponse error = new ErrorResponse();
-        error.setStatus(HttpStatus.BAD_REQUEST.value());
-        error.setError("Bad Request");
-        error.setMessage(detailedMessage);
+        ErrorResponse error = ErrorResponse.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error("Bad Request")
+                .message(detailedMessage)
+                .build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
@@ -71,10 +73,11 @@ public class GlobalExceptionHandler {
             }
         }
 
-        ErrorResponse error = new ErrorResponse();
-        error.setStatus(HttpStatus.BAD_REQUEST.value());
-        error.setError("Bad Request");
-        error.setMessage(errorMessage);
+        ErrorResponse error = ErrorResponse.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error("Bad Request")
+                .message(errorMessage)
+                .build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
@@ -84,10 +87,11 @@ public class GlobalExceptionHandler {
 
         log.error("Resource not found: {}", ex.getMessage());
 
-        ErrorResponse error = new ErrorResponse();
-        error.setStatus(HttpStatus.NOT_FOUND.value());
-        error.setError("Not Found");
-        error.setMessage(ex.getMessage());
+        ErrorResponse error = ErrorResponse.builder()
+                .status(HttpStatus.NOT_FOUND.value())
+                .error("Not Found")
+                .message(ex.getMessage())
+                .build();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 

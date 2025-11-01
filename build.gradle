@@ -35,8 +35,11 @@ openApiGenerate {
             openApiNullable: "false",
             useBeanValidation: "true",
             useSpringBoot3: "true",
-            useTags: "true"
+            useTags: "true",
+            useLombok: "true",
+            additionalModelTypeAnnotations: "@lombok.Builder"
     ]
+
 }
 
 // fix Mockito's dynamic agent loading in Java 21
