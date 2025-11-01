@@ -81,7 +81,7 @@ public class TransactionControllerTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.message").value("[customers: size must be between 1 and 50]"));
+                .andExpect(jsonPath("$.message").value("customers: size must be between 1 and 50"));
 
     }
 

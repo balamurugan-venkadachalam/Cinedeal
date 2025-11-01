@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
 
         log.error("Bad request error: {}", ex.getMessage());
         String detailedMessage = ex.getBindingResult().getFieldErrors().stream()
-                .map(error -> String.format("[%s: %s]",
+                .map(error -> String.format("%s: %s",
                         error.getField(),
                         error.getDefaultMessage() != null ? error.getDefaultMessage() : "Invalid value"))
                 .collect(Collectors.joining(", "));
