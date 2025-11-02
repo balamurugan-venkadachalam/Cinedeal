@@ -47,7 +47,7 @@ components:
       properties:
         transactionId:
           type: integer
-          format: int32
+          format: int64
           description: unique transaction id
           example: 12
           minLength: 1
@@ -69,7 +69,7 @@ components:
       properties:
         transactionId:
           type: integer
-          format: int32
+          format: int64
           description: unique transaction id
           example: 1234567890
         tickets:
@@ -120,6 +120,21 @@ components:
           format: int32
           description: number of tickets
           example: 1
+        totalCost:
+          type: number
+          format: double
+          description: total cost of the ticket
+          example: 100.00
+
+    TicketType:
+      type: string
+      description: Type of ticket
+      enum:
+        - Children
+        - Teen
+        - Adult
+        - Senior
+      example: Adult
 
     ErrorResponse:
       type: object

@@ -32,7 +32,7 @@ public class TransactionControllerTest {
     void calculatePricing_shouldReturnTransactionRequest_whenValidRequest() throws Exception {
         //GIVEN
         TransactionRequest request = TransactionRequest.builder()
-                .transactionId(1)
+                .transactionId(1L)
                 .customers(gerCustomers())
                 .build();
 
@@ -53,7 +53,7 @@ public class TransactionControllerTest {
     @Test
     void calculatePricing_shouldReturnBadRequest_whenCustomersMissing() throws Exception {
         //GIVEN
-        TransactionRequest request =  TransactionRequest.builder().transactionId(2).build();
+        TransactionRequest request =  TransactionRequest.builder().transactionId(2L).build();
 
         //WHEN & THEN
         mockMvc.perform(post("/api/v1/transactions/calculate-pricing")
@@ -70,7 +70,7 @@ public class TransactionControllerTest {
     void calculatePricing_shouldReturnBadRequest_whenCustomersIsEmpty() throws Exception {
         //GIVEN
         TransactionRequest request =  TransactionRequest.builder()
-                .transactionId(2)
+                .transactionId(2L)
                 .customers(List.of())
                 .build();
 
@@ -93,7 +93,7 @@ public class TransactionControllerTest {
                 .build();
 
         TransactionRequest request = TransactionRequest.builder()
-                .transactionId(1)
+                .transactionId(1L)
                 .customers(List.of(customer))
                 .build();
 

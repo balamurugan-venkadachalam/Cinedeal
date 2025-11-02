@@ -1,8 +1,11 @@
 package com.ticket.transaction.api;
 
+import com.ticket.transaction.mapper.TransactionMapper;
 import com.ticket.transaction.model.TransactionRequest;
 import com.ticket.transaction.model.TransactionResponse;
+import com.ticket.transaction.service.TicketPricingService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,15 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Collections;
 
 @RestController
+@RequiredArgsConstructor
 public class TransactionController implements TransactionsApi {
 
-    public ResponseEntity<TransactionResponse> calculatePricing(@Valid  TransactionRequest transactionRequest) {
-        TransactionResponse response = new TransactionResponse();
-        response.setTransactionId(transactionRequest.getTransactionId());
-        response.setTickets(Collections.emptyList());
-        response.setTotalCost(10.00);
+    private final TicketPricingService ticketPricingService;
+    private final TransactionMapper transactionMapper;
 
-        return ResponseEntity.ok(response);
+    public ResponseEntity<TransactionResponse> calculatePricing(@Valid  TransactionRequest transactionRequest) {
+        var transactionCalculation = ticketPricingService.calculatePrice(transactionRequest.getTransactionId(), transactionRequest.getCustomers());
+
+        return ResponseEntity.ok(transactionMapper.toResponse(transactionCalculation));
     }
 
     @GetMapping("/health")

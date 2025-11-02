@@ -1,7 +1,38 @@
 spring:
   application:
     name: Ticket Transaction API
+  jackson:
+    mapper:
+      sort-properties-alphabetically: false
+    default-property-inclusion: non_null
 
+# Pricing configuration - can be overridden via environment variables
+pricing:
+  adult-base-price: 25.00
+  senior-base-price: 17.50
+  teen-base-price: 12.00
+  children-base-price: 5.00
+
+  # Bulk discount rules
+  bulk-discounts:
+    - ticket-type: children
+      quantity: 3
+      discountRate: 0.25
+
+  # Age ranges for ticket types
+  age-ranges:
+    children:
+      min: 0
+      max: 10
+    teen:
+      min: 11
+      max: 17
+    adult:
+      min: 18
+      max: 64
+    senior:
+      min: 65
+      max: 100
 
 logging:
   level:
