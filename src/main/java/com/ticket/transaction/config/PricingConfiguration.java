@@ -20,8 +20,9 @@ public class PricingConfiguration {
     private double seniorBasePrice = 17.50;
     private double teenBasePrice = 15.00;
     private double childrenBasePrice = 5.00;
+    private double seniorDiscountRate = 0.30;
 
     private Map<String, AgeRange> ageRanges = new HashMap<>();
-    private List<BulkDiscountRule> bulkDiscounts = new ArrayList<>();
+    private List<BulkDiscountConfig> bulkDiscounts = new ArrayList<>();
 }
 

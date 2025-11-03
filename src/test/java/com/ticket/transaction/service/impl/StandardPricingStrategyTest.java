@@ -2,10 +2,14 @@ package com.ticket.transaction.service.impl;
 
 import com.ticket.transaction.config.PricingConfiguration;
 import com.ticket.transaction.domain.TicketType;
+import com.ticket.transaction.service.discount.DiscountEngine;
+import com.ticket.transaction.service.discount.impl.BulkDiscountStrategy;
+import com.ticket.transaction.service.discount.impl.SeniorDiscountStrategy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,19 +18,27 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class StandardPricingStrategyTest {
 
     private StandardPricingStrategy pricingStrategy;
-    private PricingConfiguration config;
-    private ConfigBasedTicketPriceProvider priceProvider;
 
     @BeforeEach
     void setUp() {
-        config = new PricingConfiguration();
+        PricingConfiguration config = new PricingConfiguration();
         config.setAdultBasePrice(25.00);
-        config.setSeniorBasePrice(17.50);
+        config.setSeniorBasePrice(25.00);
         config.setTeenBasePrice(12.00);
         config.setChildrenBasePrice(5.00);
+        config.setSeniorDiscountRate(0.30);
 
-        priceProvider = new ConfigBasedTicketPriceProvider(config);
-        pricingStrategy = new StandardPricingStrategy(config, priceProvider);
+        ConfigBasedTicketPriceProvider priceProvider = new ConfigBasedTicketPriceProvider(config);
+
+        BulkDiscountStrategy bulkDiscountStrategy = new BulkDiscountStrategy(config);
+        SeniorDiscountStrategy seniorDiscountStrategy = new SeniorDiscountStrategy(config);
+        DiscountEngine discountEngine = new DiscountEngine(List.of(bulkDiscountStrategy, seniorDiscountStrategy), config);
+        discountEngine.init();
+
+
+
+
+        pricingStrategy = new StandardPricingStrategy(config, priceProvider, discountEngine);
         pricingStrategy.init();
     }
 
