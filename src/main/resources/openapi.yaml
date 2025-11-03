@@ -25,11 +25,11 @@ paths:
 
       responses:
         "200": # status code
-         description: Transaction details retrieved successfully
-         content:
-           application/json:
-             schema:
-               $ref: '#/components/schemas/TransactionResponse'
+          description: Transaction details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
         "400":
           description: Bad request
           content:
