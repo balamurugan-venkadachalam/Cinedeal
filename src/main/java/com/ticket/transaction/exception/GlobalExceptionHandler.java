@@ -1,15 +1,19 @@
 package com.ticket.transaction.exception;
 
+import com.ticket.transaction.model.Error;
 import com.ticket.transaction.model.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindingResult;
+
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -30,7 +34,6 @@ public class GlobalExceptionHandler {
 
         ErrorResponse error = ErrorResponse.builder()
                 .status(status.value())
-                .error(status.getReasonPhrase())
                 .message(ex.getMessage() != null ? ex.getMessage() : "Invalid argument")
                 .build();
         return ResponseEntity.status(status).body(error);
@@ -41,16 +44,18 @@ public class GlobalExceptionHandler {
             MethodArgumentNotValidException ex, WebRequest request) {
 
         log.error("Bad request error: {}", ex.getMessage());
-        String detailedMessage = ex.getBindingResult().getFieldErrors().stream()
-                .map(error -> String.format("%s: %s",
-                        error.getField(),
-                        error.getDefaultMessage() != null ? error.getDefaultMessage() : "Invalid value"))
-                .collect(Collectors.joining(", "));
+        BindingResult bindingResult = ex.getBindingResult();
+        List<Error> fieldErrors = bindingResult.getFieldErrors().stream()
+                .map(error -> Error.builder()
+                        .field(error.getField())
+                        .message(error.getDefaultMessage())
+                        .build()
+                ).toList();
 
         ErrorResponse error = ErrorResponse.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
-                .error("Bad Request")
-                .message(detailedMessage)
+                .errors(fieldErrors)
+                .message("Bad Request")
                 .build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
@@ -75,7 +80,6 @@ public class GlobalExceptionHandler {
 
         ErrorResponse error = ErrorResponse.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
-                .error("Bad Request")
                 .message(errorMessage)
                 .build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
@@ -89,7 +93,6 @@ public class GlobalExceptionHandler {
 
         ErrorResponse error = ErrorResponse.builder()
                 .status(HttpStatus.NOT_FOUND.value())
-                .error("Not Found")
                 .message(ex.getMessage())
                 .build();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
@@ -98,6 +101,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleGenericError(Exception ex) {
         log.error("Unexpected error", ex);
+        ErrorResponse error = ErrorResponse.builder()
+                .status(HttpStatus.NOT_FOUND.value())
+                .message(ex.getMessage())
+                .build();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(Map.of("error", "An unexpected error occurred"));
     }

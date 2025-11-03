@@ -144,11 +144,23 @@ components:
           format: int32
           description: HTTP status code
           example: 400
-        error:
-          type: string
-          description: error message
-          example: Bad Request
         message:
           type: string
           description: error message
           example: Invalid request body
+        errors:
+          type: array
+          description: collection of errors
+          items:
+           $ref: '#/components/schemas/Error'
+    Error:
+      type: object
+      properties:
+        field:
+          type: string
+          description: field name
+          example: transactionId
+        message:
+          type: string
+          description: error message
+          example: must be greater than or equal to 1
