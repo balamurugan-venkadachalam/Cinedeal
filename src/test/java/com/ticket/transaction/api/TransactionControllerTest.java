@@ -77,7 +77,9 @@ public class TransactionControllerTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.message").value("customers: size must be between 1 and 50"));
+                .andExpect(jsonPath("$.errors[0].field").value("customers"))
+                .andExpect(jsonPath("$.errors[0].message").value("size must be between 1 and 50"));
+
 
     }
 
@@ -96,7 +98,8 @@ public class TransactionControllerTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.message").value("customers: size must be between 1 and 50"));
+                .andExpect(jsonPath("$.errors[0].field").value("customers"))
+                .andExpect(jsonPath("$.errors[0].message").value("size must be between 1 and 50"));
 
     }
 
@@ -119,7 +122,8 @@ public class TransactionControllerTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.message").value("customers[0].age: must not be null"));
+                .andExpect(jsonPath("$.errors[0].field").value("customers[0].age"))
+                .andExpect(jsonPath("$.errors[0].message").value("must not be null"));
 
     }
 
@@ -137,7 +141,8 @@ public class TransactionControllerTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.message").value("transactionId: must not be null"));
+                .andExpect(jsonPath("$.errors[0].field").value("transactionId"))
+                .andExpect(jsonPath("$.errors[0].message").value("must not be null"));
 
     }
 
