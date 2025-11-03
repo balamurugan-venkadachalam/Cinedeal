@@ -3,12 +3,10 @@ package com.ticket.transaction.mapper;
 import com.ticket.transaction.domain.TicketCalculation;
 import com.ticket.transaction.domain.TransactionCalculation;
 import com.ticket.transaction.model.Ticket;
-import com.ticket.transaction.model.TicketType;
 import com.ticket.transaction.model.TransactionResponse;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 

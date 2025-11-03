@@ -1,26 +1,32 @@
 package com.ticket.transaction.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ticket.transaction.exception.GlobalExceptionHandler;
+import com.ticket.transaction.domain.TicketCalculation;
+import com.ticket.transaction.domain.TicketType;
+import com.ticket.transaction.domain.TransactionCalculation;
+import com.ticket.transaction.mapper.TransactionMapper;
 import com.ticket.transaction.model.Customer;
 import com.ticket.transaction.model.TransactionRequest;
+import com.ticket.transaction.model.TransactionResponse;
+import com.ticket.transaction.service.TicketPricingService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(TransactionController.class)
 public class TransactionControllerTest {
 
     @Autowired
@@ -29,13 +35,26 @@ public class TransactionControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @MockBean
+    private TicketPricingService ticketPricingService;
+
+    @MockBean
+    private TransactionMapper transactionMapper;
+
     @Test
     void calculatePricing_shouldReturnTransactionRequest_whenValidRequest() throws Exception {
         //GIVEN
         TransactionRequest request = TransactionRequest.builder()
                 .transactionId(1L)
-                .customers(gerCustomers())
+                .customers(getCustomers())
                 .build();
+        TransactionCalculation calculation = createMockCalculation(1L, 50.00);
+        TransactionResponse response = createMockResponse(1L, 50.00);
+
+        when(ticketPricingService.calculatePrice(anyLong(), anyList())).thenReturn(calculation);
+        when(transactionMapper.toResponse(any())).thenReturn(response);
+
+
 
 
         //WHEN & THEN
@@ -45,11 +64,9 @@ public class TransactionControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.transactionId").exists())
-                .andExpect(jsonPath("$.tickets").exists())
-                .andExpect(jsonPath("$.totalCost").exists());
+                .andExpect(jsonPath("$.transactionId").value(1))
+                .andExpect(jsonPath("$.totalCost").value(50.00));
     }
-
 
     @Test
     void calculatePricing_shouldReturnBadRequest_whenCustomersMissing() throws Exception {
@@ -113,7 +130,7 @@ public class TransactionControllerTest {
     void calculatePricing_shouldReturnBadRequest_whenTransactionIdMissing() throws Exception {
         //GIVEN
         TransactionRequest request = TransactionRequest.builder()
-                .customers(gerCustomers())
+                .customers(getCustomers())
                 .build();
 
         //WHEN & THEN
@@ -128,19 +145,33 @@ public class TransactionControllerTest {
     }
 
 
-    private static List<Customer> gerCustomers() {
 
-        Customer customer1 = Customer.builder()
-                .name("Alex K")
-                .age(25)
+    private List<Customer> getCustomers() {
+        return List.of(
+                Customer.builder().name("Alex K").age(25).build(),
+                Customer.builder().name("Jone David").age(30).build()
+        );
+    }
+
+
+    private TransactionCalculation createMockCalculation(Long id, double totalCost) {
+        return TransactionCalculation.builder()
+                .transactionId(id)
+                .ticketCalculation(TicketCalculation.builder()
+                        .ticketType(TicketType.ADULT)
+                        .quantity(2)
+                        .totalCost(totalCost)
+                        .discountApplied(false)
+                        .build())
+                .totalCost(totalCost)
                 .build();
+    }
 
-        Customer customer2 = Customer.builder()
-                .name("Jone David")
-                .age(30)
-                .build();
-
-        return List.of(customer1, customer2);
+    private TransactionResponse createMockResponse(Long id, double totalCost) {
+        TransactionResponse response = new TransactionResponse();
+        response.setTransactionId(id);
+        response.setTotalCost(totalCost);
+        return response;
     }
 
 }
