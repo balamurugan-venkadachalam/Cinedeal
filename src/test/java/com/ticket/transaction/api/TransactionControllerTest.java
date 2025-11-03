@@ -16,14 +16,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 
 @WebMvcTest(TransactionController.class)
@@ -55,8 +54,6 @@ public class TransactionControllerTest {
         when(transactionMapper.toResponse(any())).thenReturn(response);
 
 
-
-
         //WHEN & THEN
         mockMvc.perform(post("/api/v1/transactions/calculate-pricing")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -71,7 +68,7 @@ public class TransactionControllerTest {
     @Test
     void calculatePricing_shouldReturnBadRequest_whenCustomersMissing() throws Exception {
         //GIVEN
-        TransactionRequest request =  TransactionRequest.builder().transactionId(2L).build();
+        TransactionRequest request = TransactionRequest.builder().transactionId(2L).build();
 
         //WHEN & THEN
         mockMvc.perform(post("/api/v1/transactions/calculate-pricing")
@@ -87,7 +84,7 @@ public class TransactionControllerTest {
     @Test
     void calculatePricing_shouldReturnBadRequest_whenCustomersIsEmpty() throws Exception {
         //GIVEN
-        TransactionRequest request =  TransactionRequest.builder()
+        TransactionRequest request = TransactionRequest.builder()
                 .transactionId(2L)
                 .customers(List.of())
                 .build();
@@ -143,7 +140,6 @@ public class TransactionControllerTest {
                 .andExpect(jsonPath("$.message").value("transactionId: must not be null"));
 
     }
-
 
 
     private List<Customer> getCustomers() {

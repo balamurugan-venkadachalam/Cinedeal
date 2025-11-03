@@ -5,18 +5,18 @@ import com.ticket.transaction.model.Customer;
 import com.ticket.transaction.model.TransactionRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @SpringBootTest
@@ -28,6 +28,13 @@ public class TransactionControllerIntegrationTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    private static Customer createCustomer(String name, int age) {
+        return Customer.builder()
+                .name(name)
+                .age(age)
+                .build();
+    }
 
     @Test
     void calculatePricing_shouldReturnTransactionRequest_whenValidRequest() throws Exception {
@@ -51,15 +58,6 @@ public class TransactionControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json("{\"transactionId\":1,\"tickets\":[{\"ticketType\":\"Children\",\"quantity\":2,\"totalCost\":10.00},{\"ticketType\":\"Senior\",\"quantity\":1,\"totalCost\":17.50}],\"totalCost\":27.50}", false));
-    }
-
-
-
-    private static Customer createCustomer(String name, int age) {
-         return Customer.builder()
-                .name(name)
-                .age(age)
-                .build();
     }
 
 }

@@ -22,7 +22,7 @@ public class ConfigBasedTicketTypeResolver implements TicketTypeResolver {
 
     @PostConstruct
     public void init() {
-        if(config.getAgeRanges().isEmpty()){
+        if (config.getAgeRanges().isEmpty()) {
             initializeDefaultAgeRanges();
         }
     }

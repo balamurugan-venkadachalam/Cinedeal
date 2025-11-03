@@ -1,6 +1,5 @@
 package com.ticket.transaction.service.impl;
 
-import com.ticket.transaction.config.PricingConfiguration;
 import com.ticket.transaction.domain.TicketType;
 import com.ticket.transaction.domain.TransactionCalculation;
 import com.ticket.transaction.model.Customer;
@@ -16,8 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)

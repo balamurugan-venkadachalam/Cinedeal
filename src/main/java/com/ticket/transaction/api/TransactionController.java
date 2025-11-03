@@ -10,8 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collections;
-
 @RestController
 @RequiredArgsConstructor
 public class TransactionController implements TransactionsApi {
@@ -19,7 +17,7 @@ public class TransactionController implements TransactionsApi {
     private final TicketPricingService ticketPricingService;
     private final TransactionMapper transactionMapper;
 
-    public ResponseEntity<TransactionResponse> calculatePricing(@Valid  TransactionRequest transactionRequest) {
+    public ResponseEntity<TransactionResponse> calculatePricing(@Valid TransactionRequest transactionRequest) {
         var transactionCalculation = ticketPricingService.calculatePrice(transactionRequest.getTransactionId(), transactionRequest.getCustomers());
 
         return ResponseEntity.ok(transactionMapper.toResponse(transactionCalculation));
