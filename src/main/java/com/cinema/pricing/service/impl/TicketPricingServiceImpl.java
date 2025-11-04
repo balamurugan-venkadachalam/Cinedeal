@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Handles the business logic for calculating ticket prices based on customer ages.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor

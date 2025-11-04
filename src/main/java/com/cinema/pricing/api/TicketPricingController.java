@@ -7,9 +7,12 @@ import com.cinema.pricing.service.TicketPricingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * REST controller for movie ticket pricing operations.
+ * Implements the generated OpenAPI interface.
+ */
 @RestController
 @RequiredArgsConstructor
 public class TicketPricingController implements TicketPricingApi {

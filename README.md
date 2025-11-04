@@ -58,6 +58,29 @@ IntelliJ IDEA provides a built-in HTTP client for testing REST APIs directly fro
 
 2. **Run a request:**
     - Click the ▶️ icon next to any request
+
+## Configuration
+
+Edit `src/main/resources/application.yml` to customize:
+
+```yaml
+pricing:
+  # Base prices
+  adult-base-price: 25.00
+  senior-base-price: 17.50
+  teen-base-price: 12.00
+  children-base-price: 5.00
+  
+  # Bulk discounts
+  bulk-discounts:
+    - ticket-type: children
+      threshold: 3
+      rate: 0.25  # 25% off
+```
+
+### Class Diagram
+
+![Class Architecture](doc/digram.png)
  
 ## TODO
 - Authentication & Authorization
