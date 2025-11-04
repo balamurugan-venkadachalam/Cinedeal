@@ -22,9 +22,4 @@ public class TicketPricingController implements TicketPricingApi {
 
         return ResponseEntity.ok(transactionMapper.toResponse(transactionCalculation));
     }
-
-    @GetMapping("/health")
-    public ResponseEntity<String> health() {
-        return ResponseEntity.ok("Service is healthy");
-    }
 }

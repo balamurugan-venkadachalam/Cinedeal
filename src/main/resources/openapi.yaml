@@ -6,7 +6,7 @@ info:
 
 servers:
   - url: http://localhost:8080
-    description: Optional server description, e.g. Main (production) server
+    description: localhost server
 
 paths:
   /api/v1/tickets/calculate-pricing:
@@ -36,7 +36,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-
 components:
   schemas:
     TransactionRequest:
