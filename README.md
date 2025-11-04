@@ -22,8 +22,8 @@ A RESTful API for calculating cinema ticket prices with support for multiple tic
 ### 1. Clone the repository
 
 ```bash
-git clone <repository-url>
-cd booking
+git clone git@github.com:balamurugan-venkadachalam/cinema-pricing-service.git
+cd cinema-pricing-service
 ```
 
 ### 2. Build the project
