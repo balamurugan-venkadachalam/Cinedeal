@@ -6,10 +6,10 @@ A RESTful API for calculating cinema ticket prices with support for multiple tic
 
 - **Java 21**
 - **Spring Boot 3.3.5**
-- **Gradle** (build automation)
+- **Gradle**
 - **OpenAPI Generator** (API-first development)
-- **Lombok** (reduced boilerplate)
-- **JUnit 5 & MockMvc** (testing)
+- **Lombok**
+- **JUnit 5 & MockMvc**
 
 
 ## Prerequisites
