@@ -1,8 +1,6 @@
 package com.cinema.pricing.service.discount;
 
-import com.cinema.pricing.config.PricingConfiguration;
 import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -41,17 +39,17 @@ public class DiscountEngine {
                 .filter(strategy -> strategy.isApplicable(context))
                 .map(strategy -> {
                             DiscountResult result = strategy.calculateDiscount(context);
-                            if (result.isApplied()) {
-                                log.debug("Discount applied: {} - {}", result.getDisplayName(), result.getDiscountAmount());
+                            if (result.applied()) {
+                                log.debug("Discount applied: {} - {}", result.displayName(), result.discountAmount());
                             }
                             return result;
                         }
 
-                ).filter(DiscountResult::isApplied)
+                ).filter(DiscountResult::applied)
                 .collect(Collectors.toList());
 
         var totalDiscount = results.stream()
-                .mapToDouble(DiscountResult::getDiscountAmount)
+                .mapToDouble(DiscountResult::discountAmount)
                 .sum();
 
         if (!results.isEmpty()) {

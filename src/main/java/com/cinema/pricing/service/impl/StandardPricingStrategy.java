@@ -53,7 +53,7 @@ public class StandardPricingStrategy implements PricingStrategy {
 
         DiscountSummary summary = discountEngine.applyDiscounts(context);
 
-        var finalCost = baseTotalCost - summary.getTotalDiscountAmount();
+        var finalCost = baseTotalCost - summary.totalDiscountAmount();
         finalCost = finalCost < 0 ? 0.0 : finalCost;
 
         // Round to 2 decimal places

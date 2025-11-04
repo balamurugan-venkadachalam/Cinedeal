@@ -1,18 +1,10 @@
 package com.cinema.pricing.service.discount;
 
 import lombok.Builder;
-import lombok.Value;
 
-@Value
 @Builder
-public class DiscountResult {
-    String discountType;
-    String displayName;
-    double discountAmount;
-    double discountRate;
-    boolean applied;
-    String reason;
-
+public record DiscountResult(String discountType, String displayName, double discountAmount, double discountRate,
+                             boolean applied, String reason) {
     public static DiscountResult noDiscount(String reason) {
         return DiscountResult.builder()
                 .applied(false)

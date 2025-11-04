@@ -30,7 +30,7 @@ public class StandardPricingStrategyTest {
         ConfigBasedTicketPriceProvider priceProvider = new ConfigBasedTicketPriceProvider(config);
         BulkDiscountStrategy bulkDiscountStrategy = new BulkDiscountStrategy(config);
         SeniorDiscountStrategy seniorDiscountStrategy = new SeniorDiscountStrategy(config);
-        
+
         DiscountEngine discountEngine = new DiscountEngine(List.of(bulkDiscountStrategy, seniorDiscountStrategy));
         discountEngine.init();
 
