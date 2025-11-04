@@ -5,9 +5,9 @@ plugins {
     id 'org.openapi.generator' version '7.17.0'
 }
 
-group = 'com.ticket'
+group = 'com.cinema.pricing'
 version = '0.0.1-SNAPSHOT'
-description = 'Cinimas online booking  '
+description = 'Movie ticket price calculator'
 
 java {
 	toolchain {
@@ -26,8 +26,8 @@ openApiGenerate {
     generatorName = "spring"
     library = "spring-boot"
     outputDir = "${layout.buildDirectory.get().asFile}/generated"
-    apiPackage = "com.ticket.transaction.api"
-    modelPackage = "com.ticket.transaction.model"
+    apiPackage = "com.cinema.pricing.api"
+    modelPackage = "com.cinema.pricing.model"
     configOptions = [
             interfaceOnly: "true",
             dateLibrary: "java8",
@@ -73,7 +73,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     // Explicitly exclude vulnerable commons-lang3 from springdoc and add patched version
-    implementation('org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0') {
+    implementation('org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0') {
         exclude group: 'org.apache.commons', module: 'commons-lang3'
     }
     // Explicitly add the patched version
