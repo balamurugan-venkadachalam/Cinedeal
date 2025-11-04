@@ -74,7 +74,7 @@ pricing:
   # Bulk discounts
   bulk-discounts:
     - ticket-type: children
-      threshold: 3
+      quantity: 3
       rate: 0.25  # 25% off
 ```
 
