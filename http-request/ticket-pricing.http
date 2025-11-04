@@ -1,0 +1,171 @@
+### Cinema Pricing Service - HTTP Requests
+### Use IntelliJ IDEA's HTTP Client to execute these requests
+
+### Variables
+@baseUrl = http://localhost:8080
+@apiPath = /api/v1/tickets/calculate-pricing
+
+### Example 1: Senior with Children (Bulk Discount)
+POST {{baseUrl}}{{apiPath}}
+Content-Type: application/json
+
+{
+  "transactionId": 1,
+  "customers": [
+    {
+      "name": "John Smith",
+      "age": 70
+    },
+    {
+      "name": "Jane Doe",
+      "age": 5
+    },
+    {
+      "name": "Bob Doe",
+      "age": 6
+    }
+  ]
+}
+
+### Example 2: Mixed Ages with Bulk Discount
+POST {{baseUrl}}{{apiPath}}
+Content-Type: application/json
+
+{
+  "transactionId": 2,
+  "customers": [
+    {
+      "name": "Billy Kidd",
+      "age": 36
+    },
+    {
+      "name": "Zoe Daniels",
+      "age": 3
+    },
+    {
+      "name": "George White",
+      "age": 8
+    },
+    {
+      "name": "Tommy Anderson",
+      "age": 9
+    },
+    {
+      "name": "Joe Smith",
+      "age": 17
+    }
+  ]
+}
+
+### Example 3: All Ticket Types
+POST {{baseUrl}}{{apiPath}}
+Content-Type: application/json
+
+{
+  "transactionId": 3,
+  "customers": [
+    {
+      "name": "Jesse James",
+      "age": 36
+    },
+    {
+      "name": "Daniel Anderson",
+      "age": 95
+    },
+    {
+      "name": "Mary Jones",
+      "age": 15
+    },
+    {
+      "name": "Michelle Parker",
+      "age": 10
+    }
+  ]
+}
+
+### Example 4: Single Adult Ticket
+POST {{baseUrl}}{{apiPath}}
+Content-Type: application/json
+
+{
+  "transactionId": 4,
+  "customers": [
+    {
+      "name": "John Doe",
+      "age": 35
+    }
+  ]
+}
+
+### Example 5: Family Group (No Bulk Discount)
+POST {{baseUrl}}{{apiPath}}
+Content-Type: application/json
+
+{
+  "transactionId": 5,
+  "customers": [
+    {
+      "name": "Parent One",
+      "age": 40
+    },
+    {
+      "name": "Parent Two",
+      "age": 38
+    },
+    {
+      "name": "Child One",
+      "age": 8
+    },
+    {
+      "name": "Child Two",
+      "age": 6
+    }
+  ]
+}
+
+### Error 1: Empty Customers Array
+POST {{baseUrl}}{{apiPath}}
+Content-Type: application/json
+
+{
+  "transactionId": 103,
+  "customers": []
+}
+
+### Error 2: Missing Customer Name
+POST {{baseUrl}}{{apiPath}}
+Content-Type: application/json
+
+{
+  "transactionId": 104,
+  "customers": [
+    {
+      "age": 25
+    }
+  ]
+}
+
+### Error 3: Missing Age
+POST {{baseUrl}}{{apiPath}}
+Content-Type: application/json
+
+{
+  "transactionId": 105,
+  "customers": [
+    {
+      "name": "John Doe"
+    }
+  ]
+}
+
+
+### Health Check Endpoint
+GET {{baseUrl}}/actuator/health
+Accept: application/json
+
+### Swagger UI
+GET {{baseUrl}}/swagger-ui.html
+
+### OpenAPI Specification
+GET {{baseUrl}}/api-docs
+Accept: application/json

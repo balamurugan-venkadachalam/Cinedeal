@@ -1,6 +1,6 @@
 # Cinema Ticket Pricing API
 
-A RESTful API for calculating cinema ticket prices with support for multiple ticket types, age-based pricing, and bulk discounts.
+A RESTful API for calculating cinema ticket prices with support for multiple ticket types, age-based pricing and bulk discounts.
 
 ## Technology Stack
 
@@ -43,6 +43,22 @@ The application will start on http://localhost:8080
 http://localhost:8080/swagger-ui/index.html
 ```
 
+### 5. Using IntelliJ IDEA HTTP Client ⚡ (Recommended)
+
+IntelliJ IDEA provides a built-in HTTP client for testing REST APIs directly from the IDE.
+
+**HTTP Request File:** `http-requests/ticket-pricing.http`
+
+**How to Use:**
+
+1. **Open the HTTP file:**
+    - Run the application
+    - Open IntelliJ IDEA
+    - Navigate to `http-requests/ticket-pricing.http`
+
+2. **Run a request:**
+    - Click the ▶️ icon next to any request
+ 
 ## TODO
 - Authentication & Authorization
 - OAuth2 Authentication
