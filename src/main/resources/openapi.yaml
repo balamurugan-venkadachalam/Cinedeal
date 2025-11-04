@@ -152,7 +152,7 @@ components:
           type: array
           description: collection of errors
           items:
-           $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/Error'
     Error:
       type: object
       properties:

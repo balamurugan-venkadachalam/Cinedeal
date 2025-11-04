@@ -1,6 +1,5 @@
 package com.cinema.pricing.api;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.cinema.pricing.domain.TicketCalculation;
 import com.cinema.pricing.domain.TicketType;
 import com.cinema.pricing.domain.TransactionCalculation;
@@ -9,6 +8,7 @@ import com.cinema.pricing.model.Customer;
 import com.cinema.pricing.model.TransactionRequest;
 import com.cinema.pricing.model.TransactionResponse;
 import com.cinema.pricing.service.TicketPricingService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

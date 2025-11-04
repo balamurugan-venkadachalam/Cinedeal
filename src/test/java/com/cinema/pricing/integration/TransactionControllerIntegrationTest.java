@@ -1,8 +1,8 @@
 package com.cinema.pricing.integration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.cinema.pricing.model.Customer;
 import com.cinema.pricing.model.TransactionRequest;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -15,7 +15,8 @@ import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @SpringBootTest
@@ -51,8 +52,8 @@ public class TransactionControllerIntegrationTest {
 
         //WHEN & THEN
         mockMvc.perform(post("/api/v1/transactions/calculate-pricing")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(jsonPath("$.transactionId").value(1))
