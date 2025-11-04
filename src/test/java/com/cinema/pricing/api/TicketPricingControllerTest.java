@@ -25,8 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-@WebMvcTest(TransactionController.class)
-public class TransactionControllerTest {
+@WebMvcTest(TicketPricingController.class)
+public class TicketPricingControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

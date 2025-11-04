@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class TransactionControllerIntegrationTest {
+public class TicketPricingControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
