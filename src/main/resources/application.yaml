@@ -1,6 +1,6 @@
 spring:
   application:
-    name: Ticket Transaction API
+    name: cinema-pricing-service
   jackson:
     mapper:
       sort-properties-alphabetically: false
@@ -37,5 +37,5 @@ pricing:
 
 logging:
   level:
-    org.springframework: DEBUG
+    org.springframework: INFO
     com.ticket: DEBUG
