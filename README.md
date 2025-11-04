@@ -67,7 +67,7 @@ Edit `src/main/resources/application.yml` to customize:
 pricing:
   # Base prices
   adult-base-price: 25.00
-  senior-base-price: 17.50
+  senior-base-price: 25.00
   teen-base-price: 12.00
   children-base-price: 5.00
   
