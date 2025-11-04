@@ -51,7 +51,7 @@ public class TicketPricingControllerIntegrationTest {
 
 
         //WHEN & THEN
-        mockMvc.perform(post("/api/v1/transactions/calculate-pricing")
+        mockMvc.perform(post("/api/v1/tickets/calculate-pricing")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -82,7 +82,7 @@ public class TicketPricingControllerIntegrationTest {
         request.setCustomers(customers);
 
         //WHEN & THEN
-        mockMvc.perform(post("/api/v1/transactions/calculate-pricing")
+        mockMvc.perform(post("/api/v1/tickets/calculate-pricing")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -114,7 +114,7 @@ public class TicketPricingControllerIntegrationTest {
         customers.add(createCustomer("Child 1", 10));
         request.setCustomers(customers);
 
-        mockMvc.perform(post("/api/v1/transactions/calculate-pricing")
+        mockMvc.perform(post("/api/v1/tickets/calculate-pricing")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())

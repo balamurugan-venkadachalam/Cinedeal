@@ -55,7 +55,7 @@ public class TicketPricingControllerTest {
 
 
         //WHEN & THEN
-        mockMvc.perform(post("/api/v1/transactions/calculate-pricing")
+        mockMvc.perform(post("/api/v1/tickets/calculate-pricing")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andDo(print())
@@ -71,7 +71,7 @@ public class TicketPricingControllerTest {
         TransactionRequest request = TransactionRequest.builder().transactionId(2L).build();
 
         //WHEN & THEN
-        mockMvc.perform(post("/api/v1/transactions/calculate-pricing")
+        mockMvc.perform(post("/api/v1/tickets/calculate-pricing")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andDo(print())
@@ -92,7 +92,7 @@ public class TicketPricingControllerTest {
                 .build();
 
         //WHEN & THEN
-        mockMvc.perform(post("/api/v1/transactions/calculate-pricing")
+        mockMvc.perform(post("/api/v1/tickets/calculate-pricing")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andDo(print())
@@ -116,7 +116,7 @@ public class TicketPricingControllerTest {
                 .build();
 
         //WHEN & THEN
-        mockMvc.perform(post("/api/v1/transactions/calculate-pricing")
+        mockMvc.perform(post("/api/v1/tickets/calculate-pricing")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andDo(print())
@@ -135,7 +135,7 @@ public class TicketPricingControllerTest {
                 .build();
 
         //WHEN & THEN
-        mockMvc.perform(post("/api/v1/transactions/calculate-pricing")
+        mockMvc.perform(post("/api/v1/tickets/calculate-pricing")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andDo(print())

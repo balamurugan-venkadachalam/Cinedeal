@@ -9,11 +9,11 @@ servers:
     description: Optional server description, e.g. Main (production) server
 
 paths:
-  /api/v1/transactions/calculate-pricing:
+  /api/v1/tickets/calculate-pricing:
     post:
       operationId: calculatePricing
       tags:
-        - Transactions
+        - Ticket Pricing
       summary: Calculate ticket prices.
       description: Calculate the breakdown of movie tickets and total cost based on multiple discount types.
       requestBody:

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class TicketPricingController implements TransactionsApi {
+public class TicketPricingController implements TicketPricingApi {
 
     private final TicketPricingService ticketPricingService;
     private final TransactionMapper transactionMapper;
