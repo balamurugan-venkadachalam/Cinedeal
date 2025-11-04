@@ -42,3 +42,14 @@ The application will start on http://localhost:8080
 ```aiexclude
 http://localhost:8080/swagger-ui/index.html
 ```
+
+## TODO
+- Authentication & Authorization
+- OAuth2 Authentication
+- Docker
+- Docker Compose
+- Kubernetes
+- CI/CD
+- Logging and Tracing
+- Monitoring
+
