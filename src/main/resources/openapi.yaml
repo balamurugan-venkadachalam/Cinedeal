@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Cinema ticket pricing API
-  description: Cinema ticket pricing API
+  description: API for calculating movie ticket prices based on customer age groups. Supports Children ($5), Teen ($10), Adult ($25), and Senior ($15) pricing with automatic family discounts (25% off when 3+ children).
   version: 0.1.9
 
 servers:
