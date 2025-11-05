@@ -1,0 +1,20 @@
+package com.cinema.pricing.rules;
+
+import com.cinema.pricing.domain.PricingFact;
+import com.cinema.pricing.domain.TicketType;
+import com.cinema.pricing.config.PricingConfiguration;
+
+global PricingConfiguration config;
+
+rule "Initialize Adult Base Price"
+    salience 100
+    when
+        $fact : PricingFact(
+            ticketType == TicketType.ADULT,
+            calculatedPrice == 0.0
+        )
+    then
+        double price = $fact.getBasePrice() * $fact.getQuantity();
+        $fact.setCalculatedPrice(price);
+        update($fact);
+end
