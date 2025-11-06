@@ -11,13 +11,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.kie.api.runtime.KieContainer;
-
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieBuilder;
 import org.kie.api.builder.KieFileSystem;
 import org.kie.api.builder.KieModule;
-
+import org.kie.api.runtime.KieContainer;
 import org.kie.internal.io.ResourceFactory;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -32,15 +30,11 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class DroolsTicketPricingServiceTest {
 
-    private KieContainer kieContainer;
-
     @Mock
     private TicketTypeResolver ticketTypeResolver;
 
     @Mock
     private TicketPriceProvider ticketPriceProvider;
-
-    private PricingConfiguration pricingConfiguration;
 
     private DroolsTicketPricingService service;
 
@@ -54,12 +48,10 @@ public class DroolsTicketPricingServiceTest {
         KieBuilder kieBuilder = kieServices.newKieBuilder(kieFileSystem);
         kieBuilder.buildAll();
         KieModule kieModule = kieBuilder.getKieModule();
-        kieContainer = kieServices.newKieContainer(kieModule.getReleaseId());
+        KieContainer kieContainer = kieServices.newKieContainer(kieModule.getReleaseId());
 
 
-        pricingConfiguration = new PricingConfiguration();
-
-        pricingConfiguration = new PricingConfiguration();
+        PricingConfiguration pricingConfiguration = new PricingConfiguration();
         pricingConfiguration.setAdultBasePrice(25.0);
         pricingConfiguration.setTeenBasePrice(15.00);
         pricingConfiguration.setChildrenBasePrice(5.0);

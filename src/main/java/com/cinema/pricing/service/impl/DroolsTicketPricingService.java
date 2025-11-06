@@ -16,7 +16,10 @@ import org.kie.api.runtime.KieSession;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -59,14 +62,14 @@ public class DroolsTicketPricingService implements TicketPricingService {
 
     private List<TicketCalculation> convertToTicketCalculations(List<PricingFact> pricingFacts) {
         return pricingFacts.stream()
-                .map( fact -> TicketCalculation.builder()
-                                .ticketType(fact.getTicketType())
-                                .quantity(fact.getQuantity())
-                                .totalCost(fact.getCalculatedPrice())
-                                .discountApplied(fact.isDiscountApplied())
-                                .build())
-                        .sorted(Comparator.comparing(TicketCalculation::getTicketTypeName))
-                        .collect(Collectors.toList());
+                .map(fact -> TicketCalculation.builder()
+                        .ticketType(fact.getTicketType())
+                        .quantity(fact.getQuantity())
+                        .totalCost(fact.getCalculatedPrice())
+                        .discountApplied(fact.isDiscountApplied())
+                        .build())
+                .sorted(Comparator.comparing(TicketCalculation::getTicketTypeName))
+                .collect(Collectors.toList());
     }
 
     private void executeRules(List<PricingFact> pricingFacts) {
@@ -89,7 +92,7 @@ public class DroolsTicketPricingService implements TicketPricingService {
         List<PricingFact> facts = new ArrayList<>();
         LocalDateTime now = LocalDateTime.now();
 
-        for (var entry :ticketCounts.entrySet()){
+        for (var entry : ticketCounts.entrySet()) {
             TicketType ticketType = entry.getKey();
             int quantity = entry.getValue();
             double basePrice = ticketPriceProvider.getBasePrice(ticketType);
@@ -131,7 +134,7 @@ public class DroolsTicketPricingService implements TicketPricingService {
         }
 
         for (Customer customer : customers) {
-            if (customer.getAge() == null || customer.getAge() < 0) {
+            if (customer.getAge() == null) {
                 throw new IllegalArgumentException("Customer age cannot be null");
             }
             if (customer.getAge() < 0) {

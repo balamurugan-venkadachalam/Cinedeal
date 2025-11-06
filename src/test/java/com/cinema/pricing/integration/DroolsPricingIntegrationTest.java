@@ -31,10 +31,10 @@ import static org.assertj.core.api.Assertions.assertThat;
         PricingConfiguration.class
 })
 @TestPropertySource(properties = {
-        "pricing.adult-base-price=25.0",
-        "pricing.teen-base-price=10.0",
-        "pricing.children-base-price=5.0",
-        "pricing.senior-base-price=15.0"
+        "pricing.adult-base-price=25.00",
+        "pricing.teen-base-price=10.00",
+        "pricing.children-base-price=5.00",
+        "pricing.senior-base-price=25.00"
 })
 @DisplayName("Drools Pricing Integration Tests")
 public class DroolsPricingIntegrationTest {
@@ -48,7 +48,7 @@ public class DroolsPricingIntegrationTest {
     @DisplayName("Should execute Drools rules for single adult ticket")
     void shouldExecuteDroolsRulesForSingleAdult() {
         // GIVEN
-        List<Customer> customers = Arrays.asList(
+        List<Customer> customers = List.of(
                 createCustomer("Adult", 30)
         );
 
@@ -117,17 +117,17 @@ public class DroolsPricingIntegrationTest {
     @Test
     @DisplayName("Should execute Drools rules for family transaction from spec")
     void shouldExecuteDroolsRulesForFamilyTransaction() {
-        // Given - Example from OpenAPI spec
+        // GIVEN
         List<Customer> customers = Arrays.asList(
                 createCustomer("Senior", 70),
                 createCustomer("Child 1", 5),
                 createCustomer("Child 2", 6)
         );
 
-        // When
+        // WHEN
         TransactionCalculation result = pricingService.calculatePrice(1L, customers);
 
-        // Then
+        // THEN
         assertThat(result).isNotNull();
         assertThat(result.getTicketCalculations()).hasSize(2);
 

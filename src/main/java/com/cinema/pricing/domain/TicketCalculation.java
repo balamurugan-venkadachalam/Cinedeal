@@ -1,7 +1,6 @@
 package com.cinema.pricing.domain;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.Value;
 
 @Value
