@@ -6,6 +6,7 @@ A RESTful API for calculating cinema ticket prices with support for multiple tic
 
 - **Java 21**
 - **Spring Boot 3.3.5**
+- **Drools 8.44.0** (business rules engine)
 - **Gradle**
 - **OpenAPI Generator** (API-first development)
 - **Lombok**
@@ -70,18 +71,37 @@ pricing:
   senior-base-price: 25.00
   teen-base-price: 12.00
   children-base-price: 5.00
-  
-  # Bulk discounts
-  bulk-discounts:
-    - ticket-type: children
-      quantity: 3
-      rate: 0.25  # 25% off
+
 ```
 
-### Class Diagram
+## Updating Drools Rules
 
-![Class Architecture](doc/digram.png)
- 
+The pricing logic is powered by Drools rules located in `src/main/resources/rules/pricing-rules.drl`. To modify pricing behavior:
+
+1. **Edit the rules file** - Open `pricing-rules.drl` and modify existing rules or add new ones
+2. **Rule structure** - Each rule has a `salience` (priority), `when` (conditions), and `then` (actions)
+3. **Test your changes** - Run `DroolsTicketPricingServiceTest` to verify rule behavior
+
+**Example: Add a new discount rule**
+```drl
+rule "Teen Group Discount - 5 or more tickets get 15% off"
+    salience 50
+    no-loop true
+    when
+        $fact : PricingFact(
+            ticketType == TicketType.TEEN,
+            quantity >= 5,
+            bulkDiscountApplied == false
+        )
+    then
+        double discount = $fact.getCalculatedPrice() * 0.15;
+        $fact.setCalculatedPrice($fact.getCalculatedPrice() - discount);
+        $fact.addDiscount("Teen Group Discount (15% off for 5+ tickets)");
+        $fact.setBulkDiscountApplied(true);
+        update($fact);
+end
+```
+
 ## TODO
 - Authentication & Authorization
 - OAuth2 Authentication
