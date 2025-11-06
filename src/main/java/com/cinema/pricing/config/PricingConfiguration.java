@@ -17,8 +17,8 @@ import java.util.Map;
 public class PricingConfiguration {
 
     private double adultBasePrice = 25.00;
-    private double seniorBasePrice = 17.50;
-    private double teenBasePrice = 15.00;
+    private double seniorBasePrice = 25.00;
+    private double teenBasePrice = 12.00;
     private double childrenBasePrice = 5.00;
     private double seniorDiscountRate = 0.30;
 

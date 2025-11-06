@@ -3,8 +3,11 @@ package com.cinema.pricing.rules;
 import com.cinema.pricing.domain.PricingFact;
 import com.cinema.pricing.domain.TicketType;
 import com.cinema.pricing.config.PricingConfiguration;
+import org.slf4j.Logger;
 
 global PricingConfiguration config;
+global Logger log;
+
 
 rule "Initialize Adult Base Price"
     salience 100
@@ -14,7 +17,123 @@ rule "Initialize Adult Base Price"
             calculatedPrice == 0.0
         )
     then
+        log.debug("Initialize Adult Base Price: {} tickets @ {}", $fact.getQuantity(), $fact.getBasePrice());
         double price = $fact.getBasePrice() * $fact.getQuantity();
+        System.out.println("Adult calculated price: " + price);
+        $fact.setCalculatedPrice(price);
+        update($fact);
+
+end
+
+rule "Initialize Teen Base Price"
+    salience 100
+    when
+        $fact : PricingFact(
+            ticketType == TicketType.TEEN,
+            calculatedPrice == 0.0
+        )
+    then
+        log.debug("Initialize Teen Base Price: {} tickets @ {}", $fact.getQuantity(), $fact.getBasePrice());
+        double price = $fact.getBasePrice() * $fact.getQuantity();
+        System.out.println("Teen calculated price: " + price);
         $fact.setCalculatedPrice(price);
         update($fact);
 end
+
+rule "Initialize Children Base Price"
+    salience 100
+    when
+        $fact : PricingFact(
+            ticketType == TicketType.CHILDREN,
+            calculatedPrice == 0.0
+        )
+    then
+        log.debug("Initialize Children Base Price: {} tickets @ {}", $fact.getQuantity(), $fact.getBasePrice());
+        double price = $fact.getBasePrice() * $fact.getQuantity();
+        System.out.println("Children calculated price: " + price);
+        $fact.setCalculatedPrice(price);
+        update($fact);
+end
+
+rule "Initialize Senior Base Price"
+    salience 100
+    when
+        $fact : PricingFact(
+            ticketType == TicketType.SENIOR,
+            calculatedPrice == 0.0
+        )
+    then
+        log.debug("Initialize Senior Base Price: {} tickets @ {}", $fact.getQuantity(), $fact.getBasePrice());
+        System.out.println("Initialize Senior Base Price: " + $fact.getQuantity() + " tickets @ " + $fact.getBasePrice());
+        double price = $fact.getBasePrice() * $fact.getQuantity();
+        System.out.println("Senior calculated price: " + price);
+        $fact.setCalculatedPrice(price);
+        update($fact);
+end
+
+
+// ============================================================================
+// Discount Rules - Apply discounts based on business rules
+// ============================================================================
+
+rule "Children Bulk Discount - 3 or more tickets get 25% off"
+    salience 50
+    no-loop true
+    when
+        $fact : PricingFact(
+            ticketType == TicketType.CHILDREN,
+            quantity >= 3,
+            calculatedPrice > 0,
+            bulkDiscountApplied == false
+        )
+    then
+        log.debug("Children Bulk Discount: {} tickets qualify for 25% off", $fact.getQuantity());
+        double discount = $fact.getCalculatedPrice() * 0.25;
+        log.debug("Discount amount: {}, New price: {}", discount, ($fact.getCalculatedPrice() - discount));
+        System.out.println("Discount amount: " + discount);
+        System.out.println("New price: " + ($fact.getCalculatedPrice() - discount));
+        $fact.setCalculatedPrice($fact.getCalculatedPrice() - discount);
+        System.out.println("New calculated price: " + $fact.getCalculatedPrice());
+        $fact.addDiscount("Children Bulk Discount (25% off for 3+ tickets)");
+        $fact.setBulkDiscountApplied(true);
+        update($fact);
+end
+
+
+rule "Senior Additional Discount"
+    salience 40
+    no-loop true
+    when
+        $fact : PricingFact(
+            ticketType == TicketType.SENIOR,
+            calculatedPrice > 0,
+            discountApplied == false
+        )
+    then
+        log.debug("Senior Weekday Morning Discount: Day={}, Hour={}", $fact.getTransactionTime().getDayOfWeek(), $fact.getTransactionTime().getHour());
+        double discount = $fact.getCalculatedPrice() * 0.30;
+        log.debug("Discount amount: {}, New price: {}", discount, ($fact.getCalculatedPrice() - discount));
+        System.out.println("Discount amount: " + discount);
+        System.out.println("New price: " + ($fact.getCalculatedPrice() - discount));
+        $fact.setCalculatedPrice($fact.getCalculatedPrice() - discount);
+        $fact.addDiscount("Senior Weekday Morning Discount (10% off)");
+        update($fact);
+end
+
+rule "Round Final Price"
+    salience 10
+    no-loop true
+    when
+        $fact : PricingFact(
+            calculatedPrice > 0,
+            priceRounded == false
+        )
+    then
+        log.debug("Round Final Price for {}: Before={}", $fact.getTicketType(), $fact.getCalculatedPrice());
+        double rounded = Math.round($fact.getCalculatedPrice() * 100.0) / 100.0;
+        $fact.setCalculatedPrice(rounded);
+        $fact.setPriceRounded(true);
+        log.debug("After rounding: {}", rounded);
+        update($fact);
+end
+

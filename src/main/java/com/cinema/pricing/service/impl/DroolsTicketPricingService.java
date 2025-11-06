@@ -74,6 +74,7 @@ public class DroolsTicketPricingService implements TicketPricingService {
 
         try {
             kieSession.setGlobal("config", pricingConfiguration);
+            kieSession.setGlobal("log", log);
 
             pricingFacts.forEach(kieSession::insert);
             var rulesFired = kieSession.fireAllRules();
@@ -100,7 +101,7 @@ public class DroolsTicketPricingService implements TicketPricingService {
                     .allTicketCounts(ticketCounts)
                     .transactionTime(now)
                     .calculatedPrice(0.0)
-                    .appliedDiscounts(Collections.emptyList())
+                    .appliedDiscounts(new ArrayList<>())
                     .discountApplied(false)
                     .build();
 
@@ -130,7 +131,7 @@ public class DroolsTicketPricingService implements TicketPricingService {
         }
 
         for (Customer customer : customers) {
-            if (customer.getAge() == null) {
+            if (customer.getAge() == null || customer.getAge() < 0) {
                 throw new IllegalArgumentException("Customer age cannot be null");
             }
             if (customer.getAge() < 0) {

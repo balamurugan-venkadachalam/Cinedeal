@@ -32,6 +32,7 @@ public class DroolsApplicationConfig {
              log.error("Errors building Drools rules:");
              kb.getResults().getMessages(Message.Level.ERROR)
                      .forEach(msg -> log.error("  - {}", msg.getText()));
+
              throw new RuntimeException("Error building Drools rules - check DRL syntax");
          }
 

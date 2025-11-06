@@ -47,9 +47,81 @@ public class DroolsPricingIntegrationTest {
     @Test
     @DisplayName("Should execute Drools rules for single adult ticket")
     void shouldExecuteDroolsRulesForSingleAdult() {
-        // Given
+        // GIVEN
         List<Customer> customers = Arrays.asList(
-                createCustomer("John Doe", 30)
+                createCustomer("Adult", 30)
+        );
+
+        // WHEN
+        TransactionCalculation result = pricingService.calculatePrice(1L, customers);
+
+        // THEN
+        assertThat(result).isNotNull();
+        assertThat(result.getTotalCost()).isEqualTo(25.0);
+        assertThat(result.getTicketCalculations()).hasSize(1);
+
+        TicketCalculation ticket = result.getTicketCalculations().getFirst();
+        assertThat(ticket.getTicketType()).isEqualTo(TicketType.ADULT);
+        assertThat(ticket.getQuantity()).isEqualTo(1);
+        assertThat(ticket.getTotalCost()).isEqualTo(25.0);
+    }
+
+
+    @Test
+    @DisplayName("Should execute Drools rules for children bulk discount")
+    void shouldExecuteDroolsRulesForChildrenBulkDiscount() {
+        // GIVEN
+        List<Customer> customers = Arrays.asList(
+                createCustomer("Child 1", 5),
+                createCustomer("Child 2", 7),
+                createCustomer("Child 3", 9)
+        );
+
+        // WHEN
+        TransactionCalculation result = pricingService.calculatePrice(1L, customers);
+
+        // THEN
+        assertThat(result).isNotNull();
+
+        TicketCalculation childrenTicket = result.getTicketCalculations().stream()
+                .filter(tc -> tc.getTicketType() == TicketType.CHILDREN)
+                .findFirst()
+                .orElseThrow();
+
+        assertThat(childrenTicket.getQuantity()).isEqualTo(3);
+        assertThat(childrenTicket.getTotalCost()).isEqualTo(11.25);
+        assertThat(childrenTicket.isDiscountApplied()).isTrue();
+    }
+
+    @Test
+    @DisplayName("Should execute Drools rules for mixed ticket types")
+    void shouldExecuteDroolsRulesForMixedTicketTypes() {
+        // GIVEN
+        List<Customer> customers = Arrays.asList(
+                createCustomer("Adult 1", 36),
+                createCustomer("Teen 1", 15),
+                createCustomer("Child 1", 10),
+                createCustomer("Senior 1", 95)
+        );
+
+        // WHEN
+        TransactionCalculation result = pricingService.calculatePrice(1L, customers);
+
+        // THEN
+        assertThat(result).isNotNull();
+        assertThat(result.getTicketCalculations()).hasSize(4);
+
+        assertThat(result.getTotalCost()).isEqualTo(59.50);
+    }
+
+    @Test
+    @DisplayName("Should execute Drools rules for family transaction from spec")
+    void shouldExecuteDroolsRulesForFamilyTransaction() {
+        // Given - Example from OpenAPI spec
+        List<Customer> customers = Arrays.asList(
+                createCustomer("Senior", 70),
+                createCustomer("Child 1", 5),
+                createCustomer("Child 2", 6)
         );
 
         // When
@@ -57,13 +129,9 @@ public class DroolsPricingIntegrationTest {
 
         // Then
         assertThat(result).isNotNull();
-        assertThat(result.getTotalCost()).isEqualTo(25.0);
-        assertThat(result.getTicketCalculations()).hasSize(1);
+        assertThat(result.getTicketCalculations()).hasSize(2);
 
-        TicketCalculation ticket = result.getTicketCalculations().get(0);
-        assertThat(ticket.getTicketType()).isEqualTo(TicketType.ADULT);
-        assertThat(ticket.getQuantity()).isEqualTo(1);
-        assertThat(ticket.getTotalCost()).isEqualTo(25.0);
+        assertThat(result.getTotalCost()).isEqualTo(27.50);
     }
 
     private Customer createCustomer(String name, Integer age) {

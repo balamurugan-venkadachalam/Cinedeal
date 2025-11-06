@@ -21,7 +21,23 @@ public class PricingFact {
     private double basePrice;
     private Map<TicketType, Integer> allTicketCounts;
     private LocalDateTime transactionTime;
+
     private double calculatedPrice;
+
+    @Builder.Default
     private List<String> appliedDiscounts = new ArrayList<>();
-    private boolean discountApplied;
+
+    @Builder.Default
+    private boolean discountApplied = false;
+
+    @Builder.Default
+    private boolean bulkDiscountApplied = false;
+
+    @Builder.Default
+    private boolean priceRounded = false;
+
+    public void addDiscount(String discountName) {
+        this.appliedDiscounts.add(discountName);
+        this.discountApplied = true;
+    }
 }
