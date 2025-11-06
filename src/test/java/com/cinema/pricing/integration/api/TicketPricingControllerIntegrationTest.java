@@ -1,4 +1,4 @@
-package com.cinema.pricing.integration;
+package com.cinema.pricing.integration.api;
 
 import com.cinema.pricing.model.Customer;
 import com.cinema.pricing.model.TransactionRequest;
